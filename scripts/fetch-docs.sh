@@ -6,22 +6,27 @@
 # cron job) to pick up upstream changes.
 #
 # Usage: ./scripts/fetch-docs.sh
+#
+# Written for portability with bash 3.2 (macOS's default /bin/bash), which
+# lacks associative arrays — hence the parallel-array approach below.
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOURCES_DIR="$REPO_ROOT/docs/sources"
 
-declare -A REPOS=(
-  [adk-python]="https://github.com/google/adk-python"
-  [openai-agents-python]="https://github.com/openai/openai-agents-python"
-  [claude-agent-sdk-python]="https://github.com/anthropics/claude-agent-sdk-python"
+NAMES=(adk-python openai-agents-python claude-agent-sdk-python)
+URLS=(
+  "https://github.com/google/adk-python"
+  "https://github.com/openai/openai-agents-python"
+  "https://github.com/anthropics/claude-agent-sdk-python"
 )
 
 mkdir -p "$SOURCES_DIR"
 
-for name in "${!REPOS[@]}"; do
-  url="${REPOS[$name]}"
+for i in "${!NAMES[@]}"; do
+  name="${NAMES[$i]}"
+  url="${URLS[$i]}"
   target="$SOURCES_DIR/$name"
 
   if [ -d "$target/.git" ]; then
