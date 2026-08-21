@@ -11,7 +11,8 @@ docs/sources/claude-agent-sdk-python/
 .LSOverride
 
 # --- Editors / IDEs ---
-.vscode/
+.vscode/*
+!.vscode/settings.json
 .idea/
 *.swp
 *.swo

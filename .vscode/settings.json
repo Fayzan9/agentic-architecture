@@ -1,0 +1,7 @@
+{
+  "git.ignoredRepositories": [
+    "docs/sources/adk-python",
+    "docs/sources/openai-agents-python",
+    "docs/sources/claude-agent-sdk-python"
+  ]
+}
