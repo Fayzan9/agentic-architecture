@@ -24,6 +24,10 @@ Detailed, research-grounded design for a scalable multi-SDK agentic system, buil
 | 12 | [Roadmap & Build Sequence](12-roadmap-and-build-sequence.md) | Phased build order — what to build first, and what to deliberately defer |
 | 13 | [Future-Facing: UI Builder Readiness](13-future-facing-ui-builder-readiness.md) | What must be true *now* (config-driven agents, UI-shaped Registry metadata, first-class templates, author-blind permission enforcement, owner-scoped configs) so a future no-code agent-builder UI is additive, not a rewrite — without building any UI yet |
 
+## Applied deep-dive: legal-document RAG chatbot
+
+**[`legal-rag/`](legal-rag/README.md)** — a full, research-grounded architecture for a high-accuracy RAG chatbot over a large legal document corpus, evaluated against a real, already-planned system in this project's ecosystem. Headline finding: even top commercial legal AI products (Lexis+, Westlaw) hallucinate on 17–33% of queries despite already using citations — "has citations" is not evidence of safety. The core recommendation is a deterministic citation-verification layer (clause-ID + verbatim-quote match, run in code) layered on top of clause-level retrieval, reusing this project's own PDI "controlling stack" concept for document-version awareness.
+
 ## Guidelines — how to build this, not just what to build
 
 This README covers **what** the system is. A separate, equally detailed document set covers **how** to build/test/evolve it — methodology for staying adaptable as agent frameworks and models keep changing, without over-abstracting against a guessed-at future: **[`guidelines/`](guidelines/README.md)**. Read it alongside this set, not after — it directly shapes how `02` (agents/orchestration) and `12` (roadmap) should actually be executed.

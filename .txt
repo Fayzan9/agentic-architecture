@@ -1,0 +1,11 @@
+1. range sum queries -> prefix sum
+2. range sum update -> differency array
+3. contiguous sliding window -> sliding window
+4. unsorted array -> two pointers, same direction
+   sorted array -> two pointers, opposite ends
+5. maximum sum contiguous array -> kadane
+6. this is dutch national flag, but I didnt understand the dutch national flag concept what it is
+7. binary search 
+8. no this is more of prefix, suffix sum kind of problem, instead of sliding over n**2 variation of windows, we
+   can create prefix and suffix sums to identify the range sum
+

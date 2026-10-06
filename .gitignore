@@ -5,6 +5,13 @@ docs/sources/adk-python/
 docs/sources/openai-agents-python/
 docs/sources/claude-agent-sdk-python/
 
+# --- Assessment source data (real client documents + vendor proprietary IP) ---
+# Real client plan documents, manual review write-ups, and licensed reference
+# material (ASA guide/template/troubling-provisions). Never committed — this
+# repo is public. Only our own authored business-requirements docs
+# (assessments/*/README.md, cross-cutting-business-rules.md) are tracked.
+docs/usecase/assessments/*/data/
+
 # --- macOS ---
 .DS_Store
 .AppleDouble

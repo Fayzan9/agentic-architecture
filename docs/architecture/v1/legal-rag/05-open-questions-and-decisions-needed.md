@@ -1,0 +1,29 @@
+# Legal RAG — Open Questions & Decisions Needed
+
+Genuine decisions this document set deliberately does not make on its own — either because they require business input, or because committing now would violate this project's own "earn complexity, don't assume it" principle (`../guidelines/01-guiding-philosophy.md`).
+
+## Decisions needed before production launch with real (especially external) users
+
+1. **Authentication must land before any external-persona access is real.** `02-existing-system-assessment.md` §6 already flags this as an honestly-acknowledged, temporary gap in the current plan. This isn't a "nice to have soon" — the entire internal/external visibility boundary this system is built around (and the canary test guarding it) is meaningless without real identity behind the "internal" vs. "external" persona choice. **Recommendation: treat shipping real authentication as a hard blocker on external-user production access, not a parallel-track follow-up that can lag behind feature launch.**
+
+2. **Who signs off on the launch/regression thresholds in `04-evaluation-and-launch-gates.md`?** The specific numbers proposed there (99%+ citation validity, 0.90–0.95 faithfulness) are recommendations grounded in external practitioner guidance, not numbers this project can unilaterally declare final for someone else's legal-liability tolerance. Whoever owns legal/compliance risk for this product needs to explicitly ratify these thresholds (or set different ones) before they're treated as binding release gates — mirroring the same "SME ratification required" pattern already established for PDI's own remediation thresholds (`../../../usecase/pdi/06-open-questions-and-risks.md`, OQ-2).
+
+3. **What's the actual latency budget for the verification layer?** `03-recommended-architecture.md` §2 adds a deterministic check plus an entailment-verification model call after generation, and §3 adds a pre-generation evidence-sufficiency check. Both add real latency to every turn. This project doesn't have visibility into what response-time expectation the product/UX side has committed to — this needs to be measured against a real target once one exists, and if the target is tight, the entailment check (§2, the model-call-based one) is the more negotiable of the two to relax first, since the deterministic clause-ID/quote-match check is cheap and non-negotiable given it catches the most dangerous failure mode.
+
+## Decisions deliberately deferred, per this project's own complexity discipline
+
+4. **Whether to build a knowledge graph (GraphRAG) for cross-document synthesis questions.** `03-recommended-architecture.md` §5 explicitly recommends deferring this — metadata filtering plus a browsable taxonomy likely covers the stated "navigate/group/hierarchy" requirement for a first version. **This should be revisited only once real usage data shows a recurring, unmet need for genuine multi-hop, cross-document questions** that the taxonomy-and-filter approach can't answer — consistent with the Rule of Three (`../guidelines/01-guiding-philosophy.md` §4): don't build the graph until there's a real, counted, second-and-third instance of the same unmet need, not a hypothetical one.
+
+5. **Whether RAPTOR-style hierarchical summarization is worth adding.** This technique (recursive clustering/summarization into a retrieval tree, useful when a question needs a whole section's gist rather than one clause) wasn't included in the core recommendation in `03-recommended-architecture.md` because clause-level retrieval plus metadata filtering is a smaller, more directly evidenced first step for this specific corpus. Worth reconsidering if real usage shows a recurring pattern of "summarize this whole document/section" style questions that clause-level retrieval handles poorly.
+
+6. **Whether to adopt agentic/self-correcting retrieval (Self-RAG or Corrective RAG patterns).** These let the system itself evaluate whether initial retrieval was good enough and re-query if not, rather than committing to one retrieval pass. This is a real, well-evidenced 2026 pattern, but it adds real complexity and latency on top of everything already recommended in `03-recommended-architecture.md`. **Recommendation: don't build this in the first version.** The verification-and-abstain design already recommended (§2–§3 of `03-recommended-architecture.md`) achieves the safety-critical part of what Corrective RAG is for (never confidently answering from weak evidence) without the added complexity of a full self-correcting retrieval loop — revisit only if the simpler design proves insufficient in practice.
+
+## Decisions this document set intentionally does not weigh in on at all
+
+7. **Which specific embedding model, reranker, and underlying model provider to use.** This is a fast-moving, model-specific choice this project's own guidelines (`../guidelines/01-guiding-philosophy.md` §5, the capability-registry pattern) already say should be made by measured evidence against this project's own eval suite (§`04-evaluation-and-launch-gates.md`), not fixed in an architecture document ahead of that evidence existing.
+
+8. **Whether the existing retrieval platform's built-in hybrid search and reranking are themselves sufficient, or whether a different retrieval platform should be evaluated.** `02-existing-system-assessment.md` treats the existing platform choice as a reasonable, already-cleared baseline — but this document set hasn't independently benchmarked it against alternatives, and doing so wasn't in scope for this research pass.
+
+## Sources
+
+This document synthesizes decisions flagged throughout `01` through `04` in this folder, plus cross-references to `../../../usecase/pdi/06-open-questions-and-risks.md` and `../guidelines/01-guiding-philosophy.md` — no new external claims are introduced here beyond that synthesis.
